@@ -112,11 +112,11 @@ def insertar_usuario(usuario:UsuarioBase):
 def actualizar_disponibilidad_libro(id:int,libro:LibroBase):
     # libros[id] -> libro de la BD
     # libro -> información actualizada que envio el cliente
-    libros[id].titulo = libro.titulo
-    libros[id].autor = libro.autor
-    libros[id].unidades = libro.unidades
-    libros[id].unidades_disponible = libro.unidades_disponibles
+    libros[id]['titulo'] = libro.titulo
+    libros[id]['autor'] = libro.autor
+    libros[id]['unidades'] = libro.unidades
+    libros[id]['unidades_disponible'] = libro.unidades_disponibles
     respuesta = {
-        "mensaje": "Se actualizo el libro " + id
+        "mensaje": "Se actualizo el libro"
     }
     return respuesta
