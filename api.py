@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from bd_biblioteca import libros
+from bd_biblioteca import usuarios
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -34,3 +36,72 @@ def informacion_libro(id:int):
             "mensaje":"El libro no existe"
         }
     return respuesta
+
+#Metodo DELETE
+#URL  'libros/{id}'
+#devuelve un mensaje
+@app.delete('/libros/{id}')
+def borra_libro(id:int):
+    print("Atendiendo DELETE /libros/", id)
+    if id >=0 and id <=len(libros)-1:
+        del libros[id]
+    respuesta = {
+        "mensaje": "Elemento borrado" 
+    }
+    return respuesta
+
+# GET '/usuarios'
+@app.get('/usuarios')
+def lista_usuarios():
+    print("Atendiendo GET '/usuarios'")
+    respuesta = usuarios
+    return respuesta
+
+# GET '/usuarios/{id}'
+@app.get('/usuarios/{id}')
+def informacion_usuario(id:int):
+    print("Atendiendo GET /usuarios/",id)
+    if id >=0 and id <=len(usuarios)-1:
+        respuesta = usuarios[id]
+    else:
+        respuesta = {
+            "mensaje":"El usuario no existe"
+        }
+    return respuesta
+
+# Mapear los recursos
+class LibroBase(BaseModel):
+    titulo:str
+    unidades:int=1
+    autor:str
+    unidades_disponibles:bool=True
+
+class UsuarioBase(BaseModel):
+    nombre:str
+    direccion:str
+
+#POST '/libros'
+#Parametros de cuerpo (viajan en el cuerpo del mensaje HTTP)
+@app.post('/libros')
+def insertar_libro(libro:LibroBase):
+    print("Insertando un nuevo libro")
+    libro_nuevo = {}
+    libro_nuevo['titulo'] = libro.titulo
+    libro_nuevo['unidades'] = libro.unidades
+    libro_nuevo['autor'] = libro.autor
+    libro_nuevo['unidades_disponible'] = libro.unidades_disponibles
+    libro_nuevo['id'] = len(libros)
+    libros.append(libro_nuevo)
+    return libro_nuevo
+
+#POST '/usuarios'
+#Parametros de cuerpo (viajan en el cuerpo del mensaje HTTP)
+@app.post('/usuarios')
+def insertar_usuario(usuario:UsuarioBase):
+    print("Insertando un nuevo usuario")
+    usuario_nuevo = {}
+    usuario_nuevo['nombre'] = usuario.nombre
+    usuario_nuevo['direccion'] = usuario.direccion
+    usuario_nuevo['id'] = len(usuarios)
+    usuario.append(usuario_nuevo)
+    return usuario_nuevo
