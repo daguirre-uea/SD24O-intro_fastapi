@@ -105,3 +105,18 @@ def insertar_usuario(usuario:UsuarioBase):
     usuario_nuevo['id'] = len(usuarios)
     usuario.append(usuario_nuevo)
     return usuario_nuevo
+
+#PUT '/libros/{id}'
+#orden de los parámteros: 1) de ruta, 2) de cuerpo
+@app.put('/libros/{id}')
+def actualizar_disponibilidad_libro(id:int,libro:LibroBase):
+    # libros[id] -> libro de la BD
+    # libro -> información actualizada que envio el cliente
+    libros[id].titulo = libro.titulo
+    libros[id].autor = libro.autor
+    libros[id].unidades = libro.unidades
+    libros[id].unidades_disponible = libro.unidades_disponibles
+    respuesta = {
+        "mensaje": "Se actualizo el libro " + id
+    }
+    return respuesta
