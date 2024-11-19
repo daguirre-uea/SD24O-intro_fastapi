@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from bd_biblioteca import libros
 from bd_biblioteca import usuarios
 from pydantic import BaseModel
+from typing import Optional #Para usar el tipo de dato None en FastAPI
 
 app = FastAPI()
 
@@ -16,8 +17,9 @@ def bienvenida():
 #Metodo Get
 #URL '/libros'
 #devuelva la lista de libros
+#Query string
 @app.get('/libros')
-def lista_libros():
+def lista_libros(pagina:int,orden:Optional[str]=None,lote:int=10):
     print("Atendiendo GET '/libros'")
     respuesta = libros
     return respuesta
